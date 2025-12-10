@@ -35,26 +35,30 @@ public class LinkSettingController {
 
         String txt = linkScanTime.getText();
         if (!StringUtils.isPositiveInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入扫描时间错误");
+            // DialogUtils.showErrorDialog("失败", "输入扫描时间错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi thời gian quét nhập vào");
             return;
         }
         prop.setLinkScanTime(Long.parseLong(txt));
         txt = linkThreadNum.getText();
         if (!StringUtils.isPositiveInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入扫描扫描线程数量错误");
+            // DialogUtils.showErrorDialog("失败", "输入扫描扫描线程数量错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi số luồng quét nhập vào");
             return;
         }
         prop.setLinkThreadNum(Integer.parseInt(txt));
 
         txt = mouseClickDelay.getText();
         if (!StringUtils.isNonNegativeInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入鼠标点击延迟错误");
+            // DialogUtils.showErrorDialog("失败", "输入鼠标点击延迟错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi độ trễ click chuột nhập vào");
             return;
         }
         prop.setMouseClickDelay(Integer.parseInt(txt));
         txt = mouseMoveDelay.getText();
         if (!StringUtils.isNonNegativeInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入鼠标走子延迟错误");
+            // DialogUtils.showErrorDialog("失败", "输入鼠标走子延迟错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi độ trễ di chuyển quân cờ nhập vào");
             return;
         }
         prop.setMouseMoveDelay(Integer.parseInt(txt));

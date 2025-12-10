@@ -147,7 +147,8 @@ public class EditChessBoardController {
 
     @FXML
     void okButtonClick(MouseEvent event) {
-        if (!XiangqiUtils.validateChessBoard(board) && !DialogUtils.showConfirmDialog("提示", "检测到局面不合法，可能会导致引擎退出或者崩溃，是否继续？")) {
+        // if (!XiangqiUtils.validateChessBoard(board) && !DialogUtils.showConfirmDialog("提示", "检测到局面不合法，可能会导致引擎退出或者崩溃，是否继续？")) {
+            if (!XiangqiUtils.validateChessBoard(board) && !DialogUtils.showConfirmDialog("Thông báo", "Phát hiện cục diện không hợp lệ, có thể dẫn đến engine thoát hoặc bị crash, bạn có muốn tiếp tục không?")) {
             return;
         }
         fenCode = ChessBoard.fenCode(board, redFirstButton.isSelected());

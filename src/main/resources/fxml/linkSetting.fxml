@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane prefHeight="270.0" prefWidth="465.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.LinkSettingController">
+<!-- <AnchorPane prefHeight="270.0" prefWidth="465.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.LinkSettingController">
    <children>
       <HBox alignment="TOP_RIGHT" layoutX="42.0" layoutY="184.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -35,5 +35,36 @@
       <Label layoutX="254.0" layoutY="50.0" text="鼠标走子间隔" />
       <TextField fx:id="mouseMoveDelay" layoutX="334.0" layoutY="45.0" prefHeight="27.0" prefWidth="60.0" />
       <Label layoutX="397.0" layoutY="50.0" text="毫秒" />
+   </children>
+</AnchorPane> -->
+
+<AnchorPane prefHeight="270.0" prefWidth="498.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.LinkSettingController">
+   <children>
+      <HBox alignment="TOP_RIGHT" layoutX="42.0" layoutY="184.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#okButtonClick" prefHeight="27.0" prefWidth="72.0" text="Xác nhận" textAlignment="CENTER">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Button>
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#cancelButtonClick" prefHeight="27.0" prefWidth="72.0" text="Hủy" textAlignment="CENTER">
+               <HBox.margin>
+                  <Insets right="50.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <Label layoutX="25.0" layoutY="143.0" text="Số luồng nhận diện" />
+      <TextField fx:id="linkThreadNum" layoutX="158.0" layoutY="138.0" prefHeight="27.0" prefWidth="60.0" />
+      <Label layoutX="222.0" layoutY="143.0" text="cái (khởi động lại)" />
+      <Label layoutX="25.0" layoutY="97.0" text="Khoảng quét nhận diện" />
+      <TextField fx:id="linkScanTime" layoutX="158.0" layoutY="92.0" prefHeight="27.0" prefWidth="60.0" />
+      <Label layoutX="221.0" layoutY="99.0" text="ms" />
+      <Label layoutX="25.0" layoutY="50.0" text="Khoảng click chuột" />
+      <TextField fx:id="mouseClickDelay" layoutX="158.0" layoutY="45.0" prefHeight="27.0" prefWidth="60.0" />
+      <Label layoutX="221.0" layoutY="50.0" text="ms" />
+      <Label layoutX="255.0" layoutY="50.0" text="Khoảng di chuyển chuột" />
+      <TextField fx:id="mouseMoveDelay" layoutX="392.0" layoutY="45.0" prefHeight="27.0" prefWidth="60.0" />
+      <Label layoutX="457.0" layoutY="50.0" text="ms" />
    </children>
 </AnchorPane>

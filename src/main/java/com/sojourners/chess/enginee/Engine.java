@@ -249,7 +249,8 @@ public class Engine {
             if (Properties.getInstance().getBookSwitch()) {
                 long s = System.currentTimeMillis();
                 List<BookData> results = OpenBookManager.getInstance().queryBook(board, redGo, moves.size() / 2 >= Properties.getInstance().getOffManualSteps());
-                System.out.println("查询库时间" + (System.currentTimeMillis() - s));
+                // System.out.println("查询库时间" + (System.currentTimeMillis() - s));
+                System.out.println("Thời gian tra cứu book" + (System.currentTimeMillis() - s));
                 this.cb.showBookResults(results);
                 if (results.size() > 0 && this.analysisModel != AnalysisModel.INFINITE) {
                     if (Properties.getInstance().getBookDelayEnd() > 0 && Properties.getInstance().getBookDelayEnd() >= Properties.getInstance().getBookDelayStart()) {

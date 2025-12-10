@@ -34,22 +34,27 @@ public class ThinkData {
     public void generate(boolean redGo, boolean isReverse, ChessBoard board) {
         // 生成title
         StringBuilder sb = new StringBuilder();
-        sb.append("深度: ").append(depth).append("  ");
+        // sb.append("深度: ").append(depth).append("  ");
+        sb.append("Độ sâu: ").append(depth).append("  ");
         boolean f = false;
         if (score == null) {
-            sb.append("绝杀: ");
+            // sb.append("绝杀: ");
+            sb.append("Chiếu hết: ");
             score = mate;
             f = true;
         } else {
-            sb.append("分数: ");
+            // sb.append("分数: ");
+            sb.append("Điểm: ");
             score = score;
         }
         if (redGo && isReverse || !redGo && !isReverse) {
             score = -score;
         }
-        sb.append(score).append(f ? "步  " : "  ");
+        // sb.append(score).append(f ? "步  " : "  ");
+        sb.append(score).append(f ? " nước  " : "  ");
         sb.append("NPS: ").append(nps / 1000).append("K  ");
-        sb.append("时间: ").append(String.format("%.1fs", time / 1000D));
+        // sb.append("时间: ").append(String.format("%.1fs", time / 1000D));
+        sb.append("Thời gian: ").append(String.format("%.1fs", time / 1000D));
         title = sb.toString();
         // 生成body
         body = board.translate(detail);

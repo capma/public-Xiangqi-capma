@@ -69,7 +69,8 @@ public class App extends Application {
      */
     public static void openEngineDialog() {
         engineSetting = createStage("/fxml/engineDialog.fxml");
-        engineSetting.setTitle("引擎管理");
+        // engineSetting.setTitle("引擎管理");
+        engineSetting.setTitle("Quản lý Engine");
         engineSetting.initModality(Modality.APPLICATION_MODAL);
         engineSetting.initOwner(mainStage);
 
@@ -81,7 +82,8 @@ public class App extends Application {
      */
     public static boolean openLocalBookDialog() {
         localBookSetting = createStage("/fxml/localBook.fxml");
-        localBookSetting.setTitle("本地库管理");
+        // localBookSetting.setTitle("本地库管理");
+        localBookSetting.setTitle("Quản lý book cục bộ");
         localBookSetting.initModality(Modality.APPLICATION_MODAL);
         localBookSetting.initOwner(mainStage);
 
@@ -95,7 +97,8 @@ public class App extends Application {
      */
     public static void openEngineAdd() {
         engineAdd = createStage("/fxml/engineAdd.fxml");
-        engineAdd.setTitle("添加引擎");
+        // engineAdd.setTitle("添加引擎");
+        engineAdd.setTitle("Thêm Engine");
         engineAdd.initModality(Modality.APPLICATION_MODAL);
         engineAdd.initOwner(engineSetting);
 
@@ -111,7 +114,8 @@ public class App extends Application {
     public static void openTimeSetting() {
 
         timeSetting = createStage("/fxml/timeSetting.fxml");
-        timeSetting.setTitle("时间设置");
+        // timeSetting.setTitle("时间设置");
+        timeSetting.setTitle("Cài đặt thời gian");
         timeSetting.initModality(Modality.APPLICATION_MODAL);
         timeSetting.initOwner(mainStage);
 
@@ -127,7 +131,8 @@ public class App extends Application {
     public static void openBookSetting() {
 
         bookSetting = createStage("/fxml/bookSetting.fxml");
-        bookSetting.setTitle("库招设置");
+        // bookSetting.setTitle("库招设置");
+        bookSetting.setTitle("Cài đặt book");
         bookSetting.initModality(Modality.APPLICATION_MODAL);
         bookSetting.initOwner(mainStage);
 
@@ -143,7 +148,8 @@ public class App extends Application {
     public static void openLinkSetting() {
 
         linkSetting = createStage("/fxml/linkSetting.fxml");
-        linkSetting.setTitle("连线设置");
+        // linkSetting.setTitle("连线设置");
+        linkSetting.setTitle("Cài đặt kết nối");
         linkSetting.initModality(Modality.APPLICATION_MODAL);
         linkSetting.initOwner(mainStage);
 
@@ -162,7 +168,8 @@ public class App extends Application {
             stage.setScene(new Scene(pane));
 
             editChessBoard = stage;
-            editChessBoard.setTitle("编辑局面");
+            // editChessBoard.setTitle("编辑局面");
+            editChessBoard.setTitle("Chỉnh sửa cục diện");
             editChessBoard.initModality(Modality.APPLICATION_MODAL);
             editChessBoard.initOwner(mainStage);
 

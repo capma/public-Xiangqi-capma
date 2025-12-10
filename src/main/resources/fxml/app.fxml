@@ -26,78 +26,78 @@
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
-          <Menu mnemonicParsing="false" text="文件">
+          <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#exit" text="退出" />
+              <MenuItem mnemonicParsing="false" onAction="#exit" text="Thoát" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="局面">
+            <Menu mnemonicParsing="false" text="Cục diện">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#newButtonClick" text="新局面" />
-                  <MenuItem mnemonicParsing="false" onAction="#editChessBoardClick" text="编辑局面" />
-                  <MenuItem mnemonicParsing="false" onAction="#copyButtonClick" text="复制局面FEN" />
-                  <MenuItem mnemonicParsing="false" onAction="#pasteButtonClick" text="粘贴局面FEN" />
-                  <MenuItem mnemonicParsing="false" onAction="#copyImageMenuClick" text="复制局面图片" />
-                  <MenuItem mnemonicParsing="false" onAction="#pasteImageMenuClick" text="粘贴局面图片" />
-                  <MenuItem mnemonicParsing="false" onAction="#importImageMenuClick" text="图片导入局面" />
-                  <MenuItem mnemonicParsing="false" onAction="#exportImageMenuClick" text="局面导出图片" />
+                  <MenuItem mnemonicParsing="false" onAction="#newButtonClick" text="Cục diện mới" />
+                  <MenuItem mnemonicParsing="false" onAction="#editChessBoardClick" text="Chỉnh sửa cục diện" />
+                  <MenuItem mnemonicParsing="false" onAction="#copyButtonClick" text="Sao chép FEN" />
+                  <MenuItem mnemonicParsing="false" onAction="#pasteButtonClick" text="Dán FEN" />
+                  <MenuItem mnemonicParsing="false" onAction="#copyImageMenuClick" text="Sao chép hình ảnh" />
+                  <MenuItem mnemonicParsing="false" onAction="#pasteImageMenuClick" text="Dán hình ảnh" />
+                  <MenuItem mnemonicParsing="false" onAction="#importImageMenuClick" text="Nhập cục diện từ ảnh" />
+                  <MenuItem mnemonicParsing="false" onAction="#exportImageMenuClick" text="Xuất cục diện ra ảnh" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="开局库">
+            <Menu mnemonicParsing="false" text="Book khai cuộc">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#bookSettingButtonClick" text="库招设置" />
-                  <MenuItem mnemonicParsing="false" onAction="#localBookManageButtonClick" text="本地库管理" />
+                  <MenuItem mnemonicParsing="false" onAction="#bookSettingButtonClick" text="Cài đặt book" />
+                  <MenuItem mnemonicParsing="false" onAction="#localBookManageButtonClick" text="Quản lý book cục bộ" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="引擎">
+            <Menu mnemonicParsing="false" text="Engine">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#engineManageClick" text="引擎管理" />
-                  <MenuItem mnemonicParsing="false" onAction="#timeSettingButtonClick" text="时间设置" />
+                  <MenuItem mnemonicParsing="false" onAction="#engineManageClick" text="Quản lý Engine" />
+                  <MenuItem mnemonicParsing="false" onAction="#timeSettingButtonClick" text="Cài đặt thời gian" />
                </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="连线">
+            <Menu mnemonicParsing="false" text="Kết nối">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#linkSettingClick" text="连线参数" />
-                  <CheckMenuItem fx:id="menuOfLinkBackMode" mnemonicParsing="false" onAction="#linkBackModeChecked" text="后台连线" />
-                  <CheckMenuItem fx:id="menuOfLinkAnimation" mnemonicParsing="false" onAction="#linkAnimationChecked" text="开启动画确认" />
+                  <MenuItem mnemonicParsing="false" onAction="#linkSettingClick" text="Tham số kết nối" />
+                  <CheckMenuItem fx:id="menuOfLinkBackMode" mnemonicParsing="false" onAction="#linkBackModeChecked" text="Kết nối nền" />
+                  <CheckMenuItem fx:id="menuOfLinkAnimation" mnemonicParsing="false" onAction="#linkAnimationChecked" text="Bật xác nhận động" />
                </items>
             </Menu>
-          <Menu mnemonicParsing="false" text="设置">
+          <Menu mnemonicParsing="false" text="Cài đặt">
             <items>
-                  <CheckMenuItem fx:id="menuOfStepTip" mnemonicParsing="false" onAction="#stepTipChecked" text="棋步提示" />
-                  <CheckMenuItem fx:id="menuOfStepSound" mnemonicParsing="false" onAction="#stepSoundClick" text="走棋音效" />
-                  <CheckMenuItem fx:id="menuOfShowNumber" mnemonicParsing="false" onAction="#showNumberClick" text="显示线路" />
-                  <CheckMenuItem fx:id="menuOfTopWindow" mnemonicParsing="false" onAction="#topWindowClick" text="窗口置顶" />
-                  <CheckMenuItem fx:id="menuOfShowStatus" mnemonicParsing="false" onAction="#showStatusBarClick" text="显示状态栏" />
-                  <Menu mnemonicParsing="false" text="棋盘样式">
+                  <CheckMenuItem fx:id="menuOfStepTip" mnemonicParsing="false" onAction="#stepTipChecked" text="Gợi ý nước đi" />
+                  <CheckMenuItem fx:id="menuOfStepSound" mnemonicParsing="false" onAction="#stepSoundClick" text="Âm thanh nước đi" />
+                  <CheckMenuItem fx:id="menuOfShowNumber" mnemonicParsing="false" onAction="#showNumberClick" text="Hiện đường đi" />
+                  <CheckMenuItem fx:id="menuOfTopWindow" mnemonicParsing="false" onAction="#topWindowClick" text="Cửa sổ luôn trên" />
+                  <CheckMenuItem fx:id="menuOfShowStatus" mnemonicParsing="false" onAction="#showStatusBarClick" text="Hiện thanh trạng thái" />
+                  <Menu mnemonicParsing="false" text="Kiểu bàn cờ">
                      <items>
-                        <RadioMenuItem fx:id="menuOfDefaultBoard" mnemonicParsing="false" onAction="#boardStyleSelected" text="默认">
+                        <RadioMenuItem fx:id="menuOfDefaultBoard" mnemonicParsing="false" onAction="#boardStyleSelected" text="Mặc định">
                            <toggleGroup>
                               <ToggleGroup fx:id="boardStyle1" />
                            </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="menuOfCustomBoard" mnemonicParsing="false" onAction="#boardStyleSelected" text="红黑" toggleGroup="$boardStyle1" />
+                        <RadioMenuItem fx:id="menuOfCustomBoard" mnemonicParsing="false" onAction="#boardStyleSelected" text="Đỏ đen" toggleGroup="$boardStyle1" />
                      </items>
                   </Menu>
-                  <Menu mnemonicParsing="false" text="棋盘大小">
+                  <Menu mnemonicParsing="false" text="Kích thước bàn cờ">
                     <items>
-                        <RadioMenuItem fx:id="menuOfSmallBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="小棋盘">
+                        <RadioMenuItem fx:id="menuOfSmallBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="Nhỏ">
                            <toggleGroup>
                               <ToggleGroup fx:id="boardStyle" />
                            </toggleGroup>
                         </RadioMenuItem>
-                        <RadioMenuItem fx:id="menuOfMiddleBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="中棋盘" toggleGroup="$boardStyle" />
-                        <RadioMenuItem fx:id="menuOfBigBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="大棋盘" toggleGroup="$boardStyle" />
-                        <RadioMenuItem fx:id="menuOfLargeBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="超大棋盘" toggleGroup="$boardStyle" />
-                        <RadioMenuItem fx:id="menuOfAutoFitBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="自适应" toggleGroup="$boardStyle" />
+                        <RadioMenuItem fx:id="menuOfMiddleBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="Trung bình" toggleGroup="$boardStyle" />
+                        <RadioMenuItem fx:id="menuOfBigBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="Lớn" toggleGroup="$boardStyle" />
+                        <RadioMenuItem fx:id="menuOfLargeBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="Rất lớn" toggleGroup="$boardStyle" />
+                        <RadioMenuItem fx:id="menuOfAutoFitBoard" mnemonicParsing="false" onAction="#boardSizeSelected" text="Tự động" toggleGroup="$boardStyle" />
                     </items>
                   </Menu>
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="帮助">
+          <Menu mnemonicParsing="false" text="Trợ giúp">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#homeClick" text="主页" />
-                  <MenuItem mnemonicParsing="false" onAction="#aboutClick" text="关于" />
+              <MenuItem mnemonicParsing="false" onAction="#homeClick" text="Trang chủ" />
+                  <MenuItem mnemonicParsing="false" onAction="#aboutClick" text="Giới thiệu" />
             </items>
           </Menu>
         </menus>
@@ -200,7 +200,7 @@
                                        <top>
                                           <ToolBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" BorderPane.alignment="CENTER">
                                              <items>
-                                                <Label text="引擎" />
+                                                <Label text="Engine" />
                                                 <ComboBox fx:id="engineComboBox" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="95.0" stylesheets="@../style/combobox.css" />
                                                 <ComboBox fx:id="threadComboBox" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="60.0" stylesheets="@../style/combobox.css" />
                                                 <ComboBox fx:id="hashComboBox" editable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="22.0" prefWidth="65.0" stylesheets="@../style/combobox.css" />
@@ -214,15 +214,19 @@
                                  <children>
                                     <TabPane side="BOTTOM" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <tabs>
-                                        <Tab text="棋谱">
+                                        <!-- <Tab text="棋谱"> -->
+                                        <Tab text="Kỳ phổ">
                                              <content>
                                                 <BorderPane prefHeight="200.0" prefWidth="200.0">
                                                    <center>
                                                       <TableView fx:id="recordTable" onMouseClicked="#recordTableClick" prefHeight="200.0" prefWidth="200.0" style="-fx-background-insets: 100%;" stylesheets="@../style/table.css" BorderPane.alignment="CENTER">
-                                                        <columns>
-                                                          <TableColumn editable="false" prefWidth="60.0" sortable="false" text="序号" />
-                                                          <TableColumn editable="false" prefWidth="120.0" sortable="false" text="着法" />
-                                                            <TableColumn editable="false" prefWidth="90.0" sortable="false" text="分数" />
+                                                         <columns>
+                                                            <!-- <TableColumn editable="false" prefWidth="60.0" sortable="false" text="序号" />
+                                                            <TableColumn editable="false" prefWidth="120.0" sortable="false" text="着法" />
+                                                            <TableColumn editable="false" prefWidth="90.0" sortable="false" text="分数" /> -->
+                                                            <TableColumn editable="false" prefWidth="60.0" sortable="false" text="STT" />
+                                                            <TableColumn editable="false" prefWidth="120.0" sortable="false" text="Nước đi" />
+                                                            <TableColumn editable="false" prefWidth="90.0" sortable="false" text="Điểm" />
                                                         </columns>
                                                       </TableView>
                                                    </center>
@@ -239,25 +243,35 @@
                                                 </BorderPane>
                                              </content>
                                         </Tab>
-                                        <Tab text="局势图">
+                                        <!-- <Tab text="局势图"> -->
+                                        <Tab text="Biểu đồ">
                                              <content>
                                                 <BorderPane fx:id="charPane" prefHeight="200.0" prefWidth="200.0" />
                                              </content>
                                         </Tab>
-                                        <Tab text="库招">
+                                        <!-- <Tab text="库招"> -->
+                                        <Tab text="Nước Book">
                                              <content>
                                                 <BorderPane prefHeight="200.0" prefWidth="200.0">
                                                    <center>
                                                       <TableView fx:id="bookTable" onMouseClicked="#bookTableClick" prefHeight="200.0" prefWidth="200.0" style="-fx-background-insets: 100%;" stylesheets="@../style/table.css" BorderPane.alignment="CENTER">
                                                         <columns>
-                                                          <TableColumn editable="false" prefWidth="75.0" sortable="false" text="招法" />
-                                                          <TableColumn editable="false" prefWidth="64.0" sortable="false" text="分数" />
+                                                            <!-- <TableColumn editable="false" prefWidth="75.0" sortable="false" text="招法" />
+                                                            <TableColumn editable="false" prefWidth="64.0" sortable="false" text="分数" />
                                                             <TableColumn editable="false" prefWidth="64.0" sortable="false" text="胜率" />
                                                             <TableColumn editable="false" prefWidth="60.0" sortable="false" text="胜" />
                                                             <TableColumn editable="false" prefWidth="60.0" sortable="false" text="和" />
                                                             <TableColumn editable="false" prefWidth="60.0" sortable="false" text="负" />
                                                             <TableColumn editable="false" prefWidth="75.0" sortable="false" text="备注" />
-                                                            <TableColumn editable="false" sortable="false" text="来源" />
+                                                            <TableColumn editable="false" sortable="false" text="来源" /> -->
+                                                            <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Nước" />
+                                                            <TableColumn editable="false" prefWidth="64.0" sortable="false" text="Điểm" />
+                                                            <TableColumn editable="false" prefWidth="64.0" sortable="false" text="Tỷ lệ" />
+                                                            <TableColumn editable="false" prefWidth="60.0" sortable="false" text="Thắng" />
+                                                            <TableColumn editable="false" prefWidth="60.0" sortable="false" text="Hòa" />
+                                                            <TableColumn editable="false" prefWidth="60.0" sortable="false" text="Thua" />
+                                                            <TableColumn editable="false" prefWidth="75.0" sortable="false" text="Ghi chú" />
+                                                            <TableColumn editable="false" sortable="false" text="Nguồn" />
                                                         </columns>
                                                       </TableView>
                                                    </center>

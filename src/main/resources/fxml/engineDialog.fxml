@@ -10,9 +10,12 @@
    <center>
       <TableView fx:id="table" prefHeight="338.0" prefWidth="508.0" BorderPane.alignment="CENTER">
          <columns>
-            <TableColumn prefWidth="120.0" sortable="false" text="名称" />
+            <!-- <TableColumn prefWidth="120.0" sortable="false" text="名称" />
             <TableColumn prefWidth="260.0" sortable="false" text="路径" />
-            <TableColumn prefWidth="100.0" sortable="false" text="协议" />
+            <TableColumn prefWidth="100.0" sortable="false" text="协议" /> -->
+            <TableColumn prefWidth="120.0" sortable="false" text="Tên" />
+            <TableColumn prefWidth="260.0" sortable="false" text="Đường dẫn" />
+            <TableColumn prefWidth="100.0" sortable="false" text="Giao thức" />
          </columns>
       </TableView>
    </center>

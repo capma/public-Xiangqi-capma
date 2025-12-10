@@ -51,7 +51,8 @@ public class TimeSettingController {
         if (fixDepthButton.isSelected()) {
             String txt = depthText.getText();
             if (!StringUtils.isPositiveInt(txt)) {
-                DialogUtils.showErrorDialog("失败", "层数错误");
+                // DialogUtils.showErrorDialog("失败", "层数错误");
+                DialogUtils.showErrorDialog("Thất bại", "Lỗi số lớp độ sâu");
                 return;
             }
             prop.setAnalysisModel(Engine.AnalysisModel.FIXED_STEPS);
@@ -59,7 +60,8 @@ public class TimeSettingController {
         } else {
             String txt = timeText.getText();
             if (!StringUtils.isPositiveInt(txt)) {
-                DialogUtils.showErrorDialog("失败", "时间错误");
+                // DialogUtils.showErrorDialog("失败", "时间错误");
+                DialogUtils.showErrorDialog("Thất bại", "Lỗi thời gian");
                 return;
             }
             prop.setAnalysisModel(Engine.AnalysisModel.FIXED_TIME);
@@ -68,26 +70,30 @@ public class TimeSettingController {
 
         String txt = engineDelayStart.getText();
         if (!StringUtils.isNonNegativeInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入引擎出招延迟错误");
+            // DialogUtils.showErrorDialog("失败", "输入引擎出招延迟错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi độ trễ ra nước của engine");
             return;
         }
         prop.setEngineDelayStart(Integer.parseInt(txt));
         txt = engineDelayEnd.getText();
         if (!StringUtils.isNonNegativeInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入引擎出招延迟错误");
+            // DialogUtils.showErrorDialog("失败", "输入引擎出招延迟错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi độ trễ ra nước của engine");
             return;
         }
         prop.setEngineDelayEnd(Integer.parseInt(txt));
 
         txt = bookDelayStart.getText();
         if (!StringUtils.isNonNegativeInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入库招出招延迟错误");
+            // DialogUtils.showErrorDialog("失败", "输入库招出招延迟错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi độ trễ ra nước từ book");
             return;
         }
         prop.setBookDelayStart(Integer.parseInt(txt));
         txt = bookDelayEnd.getText();
         if (!StringUtils.isNonNegativeInt(txt)) {
-            DialogUtils.showErrorDialog("失败", "输入库招出招延迟错误");
+            // DialogUtils.showErrorDialog("失败", "输入库招出招延迟错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi độ trễ ra nước từ book");
             return;
         }
         prop.setBookDelayEnd(Integer.parseInt(txt));

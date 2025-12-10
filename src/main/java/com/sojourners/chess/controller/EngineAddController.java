@@ -53,8 +53,10 @@ public class EngineAddController {
             String protocol = Engine.test(file.getPath(), options = new LinkedHashMap<>());
             if (protocol == null) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("提示");
-                alert.setHeaderText("无效的引擎文件");
+                // alert.setTitle("提示");
+                // alert.setHeaderText("无效的引擎文件");
+                alert.setTitle("Thông báo");
+                alert.setHeaderText("File engine không hợp lệ");
             }
             protocolText.setText(protocol);
             showOptions();
@@ -78,8 +80,10 @@ public class EngineAddController {
         String protocol = protocolText.getText();
         if (!"uci".equals(protocol) && !"ucci".equals(protocol)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("提示");
-            alert.setHeaderText("引擎协议不正确");
+            // alert.setTitle("提示");
+            // alert.setHeaderText("引擎协议不正确");
+            alert.setTitle("Thông báo");
+            alert.setHeaderText("Giao thức engine không đúng");
             return;
         }
         if (ec == null) {

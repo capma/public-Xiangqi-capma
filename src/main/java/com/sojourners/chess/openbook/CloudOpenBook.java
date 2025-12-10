@@ -32,7 +32,8 @@ public class CloudOpenBook implements OpenBook {
                 for (String data : datas) {
 
                     BookData bd = new BookData();
-                    bd.setSource("云库");
+                    // bd.setSource("云库");
+                    bd.setSource("Thư viện đám mây");
                     String[] items = data.split(",");
                     boolean finalPhase = false;
                     for (String item : items) {

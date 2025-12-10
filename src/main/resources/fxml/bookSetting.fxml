@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane prefHeight="300.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.BookSettingController">
+<!-- <BorderPane prefHeight="300.0" prefWidth="438.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.BookSettingController">
    <bottom>
       <HBox alignment="TOP_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="437.0" BorderPane.alignment="TOP_CENTER">
          <children>
@@ -42,6 +42,43 @@
             <Label layoutX="51.0" layoutY="189.0" text="脱谱步数" />
             <TextField fx:id="offManualSteps" layoutX="107.0" layoutY="184.0" prefHeight="27.0" prefWidth="70.0" />
             <Label layoutX="181.0" layoutY="189.0" text="步" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane> -->
+
+<BorderPane prefHeight="300.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.BookSettingController">
+   <bottom>
+      <HBox alignment="TOP_RIGHT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="437.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Button mnemonicParsing="false" onAction="#okButtonClick" prefHeight="27.0" prefWidth="72.0" text="Xác nhận">
+               <HBox.margin>
+                  <Insets right="20.0" />
+               </HBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#cancelButtonClick" prefHeight="27.0" prefWidth="72.0" text="Hủy">
+               <HBox.margin>
+                  <Insets right="50.0" />
+               </HBox.margin></Button>
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="240.0" prefWidth="437.0" BorderPane.alignment="CENTER">
+         <children>
+            <CheckBox fx:id="useCloudBook" layoutX="50.0" layoutY="40.0" mnemonicParsing="false" text="Bật book đám mây,  Thời gian chờ" />
+            <TextField fx:id="cloudBookTimeout" layoutX="261.0" layoutY="35.0" prefHeight="27.0" prefWidth="72.0" />
+            <Label layoutX="338.0" layoutY="41.0" text="ms" />
+            <CheckBox fx:id="onlyCloudFinalPhase" layoutX="50.0" layoutY="70.0" mnemonicParsing="false" text="Chỉ dùng book tàn cuộc đám mây" />
+            <CheckBox fx:id="localBookFirst" layoutX="50.0" layoutY="107.0" mnemonicParsing="false" text="Ưu tiên book cục bộ" />
+            <Button layoutX="188.0" layoutY="103.0" mnemonicParsing="false" onAction="#localBookManageButtonClick" text="Quản lý book cục bộ" />
+            <RadioButton fx:id="bestScoreRadioButton" layoutX="49.0" layoutY="147.0" mnemonicParsing="false" text="Điểm cao nhất" />
+            <RadioButton fx:id="bestWinrateRadioButton" layoutX="160.0" layoutY="147.0" mnemonicParsing="false" text="Tỷ lệ thắng cao nhất" />
+            <RadioButton fx:id="positiveRandomRadioButton" layoutX="297.0" layoutY="147.0" mnemonicParsing="false" text="Ngẫu nhiên điểm dương" />
+            <RadioButton fx:id="fullRandomRadioButton" layoutX="459.0" layoutY="147.0" mnemonicParsing="false" text="Hoàn toàn ngẫu nhiên" />
+            <Label layoutX="51.0" layoutY="189.0" text="Nước rời book" />
+            <TextField fx:id="offManualSteps" layoutX="138.0" layoutY="184.0" prefHeight="27.0" prefWidth="70.0" />
+            <Label layoutX="212.0" layoutY="189.0" text="nước" />
          </children>
       </AnchorPane>
    </center>

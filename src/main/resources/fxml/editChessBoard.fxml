@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.EditChessBoardController">
+<!-- <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="745.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.EditChessBoardController">
     <center>
         <Canvas fx:id="canvas" height="656.0" onMouseClicked="#canvasClick" width="592.0">
             <BorderPane.margin>
@@ -54,6 +54,74 @@
                     </HBox.margin>
                 </Button>
                 <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#cancelButtonClick" prefHeight="27.0" prefWidth="72.0" text="取消">
+                    <HBox.margin>
+                        <Insets right="30.0" />
+                    </HBox.margin>
+                </Button>
+            </children>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+            <padding>
+                <Insets top="20.0" />
+            </padding>
+        </HBox>
+    </bottom>
+    <right>
+        <Canvas fx:id="demoCanvas" height="656.0" onMouseClicked="#demoCanvasClick" width="140.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets left="1.0" />
+         </BorderPane.margin></Canvas>
+    </right>
+</BorderPane> -->
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="724.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sojourners.chess.controller.EditChessBoardController">
+    <center>
+        <Canvas fx:id="canvas" height="656.0" onMouseClicked="#canvasClick" width="633.0">
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </Canvas>
+    </center>
+    <bottom>
+        <HBox alignment="TOP_RIGHT" prefHeight="68.0" prefWidth="788.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#initChessBoard" prefHeight="27.0" prefWidth="99.0" text="Ban đầu">
+                    <HBox.margin>
+                        <Insets right="15.0" />
+                    </HBox.margin>
+                </Button>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#cleanChessBoard" prefHeight="27.0" prefWidth="104.0" text="Xóa hết">
+                    <HBox.margin>
+                        <Insets right="15.0" />
+                    </HBox.margin>
+                </Button>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#udReverse" prefHeight="27.0" prefWidth="112.0" text="Lật dọc">
+                    <HBox.margin>
+                        <Insets right="15.0" />
+                    </HBox.margin>
+                </Button>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#lrReverse" prefHeight="27.0" prefWidth="112.0" text="Lật ngang">
+                    <HBox.margin>
+                        <Insets right="20.0" />
+                    </HBox.margin>
+                </Button>
+                <RadioButton fx:id="redFirstButton" mnemonicParsing="false" prefHeight="17.0" prefWidth="93.0" text="Đỏ đi">
+                    <HBox.margin>
+                        <Insets right="10.0" top="7.0" />
+                    </HBox.margin>
+                </RadioButton>
+                <RadioButton fx:id="blackFirstButton" mnemonicParsing="false" prefHeight="17.0" prefWidth="101.0" text="Đen đi">
+                    <HBox.margin>
+                        <Insets right="60.0" top="7.0" />
+                    </HBox.margin>
+                </RadioButton>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#okButtonClick" prefHeight="27.0" prefWidth="118.0" text="Xác nhận">
+                    <HBox.margin>
+                        <Insets right="20.0" />
+                    </HBox.margin>
+                </Button>
+                <Button contentDisplay="RIGHT" mnemonicParsing="false" onMouseClicked="#cancelButtonClick" prefHeight="27.0" prefWidth="111.0" text="Hủy">
                     <HBox.margin>
                         <Insets right="30.0" />
                     </HBox.margin>

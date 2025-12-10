@@ -57,7 +57,8 @@ public class BookSettingController {
         String timeOut = cloudBookTimeout.getText();
         String offSteps = offManualSteps.getText();
         if (!StringUtils.isPositiveInt(timeOut) || !StringUtils.isPositiveInt(offSteps)) {
-            DialogUtils.showErrorDialog("失败", "超时时间或脱谱步数错误");
+            // DialogUtils.showErrorDialog("失败", "超时时间或脱谱步数错误");
+            DialogUtils.showErrorDialog("Thất bại", "Lỗi thời gian vượt quá hoặc số bước đi không đúng phổ");
             return;
         }
 

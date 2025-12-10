@@ -13,21 +13,27 @@ public class BoardContextMenu extends ContextMenu {
 
     /** * 私有构造函数 */
     private BoardContextMenu() {
-        MenuItem editMenuItem = new MenuItem("编辑局面");
+        // MenuItem editMenuItem = new MenuItem("编辑局面");
+        MenuItem editMenuItem = new MenuItem("Chỉnh sửa cục diện");
         getItems().add(editMenuItem);
         getItems().add(new SeparatorMenuItem());
 
-        MenuItem copyFenMenuItem = new MenuItem("复制局面FEN");
-        MenuItem pasteFenMenuItem = new MenuItem("粘贴局面FEN");
+        // MenuItem copyFenMenuItem = new MenuItem("复制局面FEN");
+        // MenuItem pasteFenMenuItem = new MenuItem("粘贴局面FEN");
+        MenuItem copyFenMenuItem = new MenuItem("Sao chép FEN");
+        MenuItem pasteFenMenuItem = new MenuItem("Dán FEN");
         getItems().addAll(copyFenMenuItem, pasteFenMenuItem);
         getItems().add(new SeparatorMenuItem());
 
-        MenuItem copyImageMenuItem = new MenuItem("复制局面图片");
-        MenuItem pasteImageMenuItem = new MenuItem("粘贴局面图片");
+        // MenuItem copyImageMenuItem = new MenuItem("复制局面图片");
+        // MenuItem pasteImageMenuItem = new MenuItem("粘贴局面图片");
+        MenuItem copyImageMenuItem = new MenuItem("Sao chép hình ảnh");
+        MenuItem pasteImageMenuItem = new MenuItem("Dán hình ảnh");
         getItems().addAll(copyImageMenuItem, pasteImageMenuItem);
         getItems().add(new SeparatorMenuItem());
 
-        Menu timeMenu = new Menu("对局时间");
+        // Menu timeMenu = new Menu("对局时间");
+        Menu timeMenu = new Menu("Thời gian đối cục");
         MenuItem timeOf01 = new MenuItem("0.1s");
         MenuItem timeOf03 = new MenuItem("0.3s");
         MenuItem timeOf05 = new MenuItem("0.5s");
@@ -41,7 +47,8 @@ public class BoardContextMenu extends ContextMenu {
             @Override
             public void handle(ActionEvent event) {
                 String time = ((MenuItem) event.getTarget()).getText();
-                if (!"对局时间".equals(time)) {
+                // if (!"对局时间".equals(time)) {
+                    if (!"Thời gian đối cục".equals(time)) {
                     time = time.substring(0, time.length() - 1);
                     long t = (long) (Double.parseDouble(time) * 1000);
                     Properties prop = Properties.getInstance();
@@ -54,7 +61,8 @@ public class BoardContextMenu extends ContextMenu {
         getItems().add(timeMenu);
         getItems().add(new SeparatorMenuItem());
 
-        MenuItem switchMenuItem = new MenuItem("交换行棋方");
+        // MenuItem switchMenuItem = new MenuItem("交换行棋方");
+        MenuItem switchMenuItem = new MenuItem("Đổi lượt đi");
         getItems().add(switchMenuItem);
     }
 

@@ -506,22 +506,32 @@ public class ChessBoard {
         char pos = getPos(fromJ, isRed);
         sb.append(isRed ? map.get(pos) : pos);
         if (fromI == toI && fromJ != toJ) {
-            sb.append("平");
+            // dịch sang tiếng Việt
+            // sb.append("平");
+            sb.append("bình");
             pos = getPos(toJ, isRed);
             sb.append(isRed ? map.get(pos) : pos);
         } else if (fromI != toI && fromJ == toJ) {
             if (isRed) {
-                sb.append(fromI > toI ? "进" : "退");
+                // dịch sang tiếng Việt
+                // sb.append(fromI > toI ? "进" : "退");
+                sb.append(fromI > toI ? "tiến" : "thoái");
             } else {
-                sb.append(fromI < toI ? "进" : "退");
+                // dịch sang tiếng Việt
+                // sb.append(fromI < toI ? "进" : "退");
+                sb.append(fromI < toI ? "tiến" : "thoái");
             }
             pos = (char) ('０' + (Math.abs(fromI - toI)));
             sb.append(isRed ? map.get(pos) : pos);
         } else {
             if (isRed) {
-                sb.append(fromI > toI ? "进" : "退");
+                // dịch sang tiếng Việt
+                // sb.append(fromI > toI ? "进" : "退");
+                sb.append(fromI > toI ? "tiến" : "thoái");
             } else {
-                sb.append(fromI < toI ? "进" : "退");
+                // dịch sang tiếng Việt
+                // sb.append(fromI < toI ? "进" : "退");
+                sb.append(fromI < toI ? "tiến" : "thoái");
             }
             pos = getPos(toJ, isRed);
             sb.append(isRed ? map.get(pos) : pos);

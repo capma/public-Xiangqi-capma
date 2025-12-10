@@ -376,7 +376,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     private void engineGo() {
         if (engine == null) {
-            DialogUtils.showWarningDialog("提示", "引擎未加载");
+            // DialogUtils.showWarningDialog("提示", "引擎未加载");
+            DialogUtils.showWarningDialog("Thông báo", "Engine chưa được tải");
             return;
         }
 
@@ -595,7 +596,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     @FXML
     public void aboutClick(ActionEvent e) {
-        DialogUtils.showInfoDialog("关于", "TCHESS"
+        // DialogUtils.showInfoDialog("关于", "TCHESS"
+        DialogUtils.showInfoDialog("Giới thiệu", "TCHESS"
                 + System.lineSeparator() + "Built on : " + App.BUILT_ON
                 + System.lineSeparator() + "Author : T"
                 + System.lineSeparator() + "Version : " + App.VERSION);
@@ -742,7 +744,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
     private void importFromBufferImage(BufferedImage img) {
         char[][] result = graphLinker.findChessBoard(img);
         if (result != null) {
-            if (!XiangqiUtils.validateChessBoard(result) && !DialogUtils.showConfirmDialog("提示", "检测到局面不合法，可能会导致引擎退出或者崩溃，是否继续？")) {
+            // if (!XiangqiUtils.validateChessBoard(result) && !DialogUtils.showConfirmDialog("提示", "检测到局面不合法，可能会导致引擎退出或者崩溃，是否继续？")) {
+                if (!XiangqiUtils.validateChessBoard(result) && !DialogUtils.showConfirmDialog("Thông báo", "Phát hiện cục diện không hợp lệ, có thể dẫn đến engine thoát hoặc bị crash, bạn có muốn tiếp tục không?")) {
                 return;
             }
             String fenCode = ChessBoard.fenCode(result, true);
@@ -825,18 +828,28 @@ public class Controller implements EngineCallBack, LinkerCallBack {
     }
 
     private void setButtonTips() {
-        newButton.setTooltip(new Tooltip("新局面"));
-        copyButton.setTooltip(new Tooltip("复制局面"));
-        pasteButton.setTooltip(new Tooltip("粘贴局面"));
-        backButton.setTooltip(new Tooltip("悔棋"));
-        reverseButton.setTooltip(new Tooltip("翻转"));
-        redButton.setTooltip(new Tooltip("引擎执红"));
-        blackButton.setTooltip(new Tooltip("引擎执黑"));
-        analysisButton.setTooltip(new Tooltip("分析模式"));
-        immediateButton.setTooltip(new Tooltip("立即出招"));
-        linkButton.setTooltip(new Tooltip("连线"));
-        bookSwitchButton.setTooltip(new Tooltip("启用库招"));
-
+        // newButton.setTooltip(new Tooltip("新局面"));
+        // copyButton.setTooltip(new Tooltip("复制局面"));
+        // pasteButton.setTooltip(new Tooltip("粘贴局面"));
+        // backButton.setTooltip(new Tooltip("悔棋"));
+        // reverseButton.setTooltip(new Tooltip("翻转"));
+        // redButton.setTooltip(new Tooltip("引擎执红"));
+        // blackButton.setTooltip(new Tooltip("引擎执黑"));
+        // analysisButton.setTooltip(new Tooltip("分析模式"));
+        // immediateButton.setTooltip(new Tooltip("立即出招"));
+        // linkButton.setTooltip(new Tooltip("连线"));
+        // bookSwitchButton.setTooltip(new Tooltip("启用库招"));
+        newButton.setTooltip(new Tooltip("Cục diện mới"));
+        copyButton.setTooltip(new Tooltip("Sao chép cục diện"));
+        pasteButton.setTooltip(new Tooltip("Dán cục diện"));
+        backButton.setTooltip(new Tooltip("Đi lại"));
+        reverseButton.setTooltip(new Tooltip("Lật bàn cờ"));
+        redButton.setTooltip(new Tooltip("Engine cầm đỏ"));
+        blackButton.setTooltip(new Tooltip("Engine cầm đen"));
+        analysisButton.setTooltip(new Tooltip("Chế độ phân tích"));
+        immediateButton.setTooltip(new Tooltip("Đi ngay"));
+        linkButton.setTooltip(new Tooltip("Kết nối"));
+        bookSwitchButton.setTooltip(new Tooltip("Bật book"));
     }
 
     private void initChessBoard() {
@@ -874,7 +887,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         initBoardContextMenu();
         // 状态栏
         this.infoShowLabel.prefWidthProperty().bind(statusToolBar.widthProperty().subtract(120));
-        this.timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "固定时间" + prop.getAnalysisValue() / 1000d + "s" : "固定深度" + prop.getAnalysisValue() + "层");
+        // this.timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "固定时间" + prop.getAnalysisValue() / 1000d + "s" : "固定深度" + prop.getAnalysisValue() + "层");
+        this.timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "Thời gian " + prop.getAnalysisValue() / 1000d + "s" : "Độ sâu " + prop.getAnalysisValue() + " lớp");
         this.statusToolBar.setVisible(prop.isLinkShowInfo());
 
         newChessBoard(null);
@@ -885,17 +899,30 @@ public class Controller implements EngineCallBack, LinkerCallBack {
             @Override
             public void handle(ActionEvent event) {
                 MenuItem item = (MenuItem) event.getTarget();
-                if ("复制局面FEN".equals(item.getText())) {
+                // if ("复制局面FEN".equals(item.getText())) {
+                //     copyButtonClick(null);
+                // } else if ("粘贴局面FEN".equals(item.getText())) {
+                //     pasteButtonClick(null);
+                // } else if ("交换行棋方".equals(item.getText())) {
+                //     switchPlayer(true);
+                // } else if ("编辑局面".equals(item.getText())) {
+                //     editChessBoardClick(null);
+                // } else if ("复制局面图片".equals(item.getText())) {
+                //     copyImageMenuClick(null);
+                // } else if ("粘贴局面图片".equals(item.getText())) {
+                //     pasteImageMenuClick(null);
+                // }
+                if ("Sao chép FEN".equals(item.getText())) {
                     copyButtonClick(null);
-                } else if ("粘贴局面FEN".equals(item.getText())) {
+                } else if ("Dán FEN".equals(item.getText())) {
                     pasteButtonClick(null);
-                } else if ("交换行棋方".equals(item.getText())) {
+                } else if ("Đổi lượt đi".equals(item.getText())) {
                     switchPlayer(true);
-                } else if ("编辑局面".equals(item.getText())) {
+                } else if ("Chỉnh sửa cục diện".equals(item.getText())) {
                     editChessBoardClick(null);
-                } else if ("复制局面图片".equals(item.getText())) {
+                } else if ("Sao chép hình ảnh".equals(item.getText())) {
                     copyImageMenuClick(null);
-                } else if ("粘贴局面图片".equals(item.getText())) {
+                } else if ("Dán hình ảnh".equals(item.getText())) {
                     pasteImageMenuClick(null);
                 }
             }
@@ -978,7 +1005,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
     }
     private void resetTable() {
         recordTable.getItems().clear();
-        recordTable.getItems().add(new ManualRecord(p, "初始局面", 0));
+        // recordTable.getItems().add(new ManualRecord(p, "初始局面", 0));
+        recordTable.getItems().add(new ManualRecord(p, "Cục diện ban đầu", 0));
     }
 
     private void initEngineView() {
@@ -1003,8 +1031,10 @@ public class Controller implements EngineCallBack, LinkerCallBack {
             e.printStackTrace();
         }
 
-        linkComboBox.getItems().addAll("自动走棋", "观战模式");
-        linkComboBox.setValue("自动走棋");
+        // linkComboBox.getItems().addAll("自动走棋", "观战模式");
+        // linkComboBox.setValue("自动走棋");
+        linkComboBox.getItems().addAll("AutoPlay", "SpectatorMode");
+        linkComboBox.setValue("AutoPlay");
     }
 
     private void refreshEngineComboBox() {
@@ -1070,7 +1100,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     private void setLinkMode(String t1) {
         if (linkMode.getValue()) {
-            if ("自动走棋".equals(t1)) {
+            // if ("自动走棋".equals(t1)) {
+                if ("AutoPlay".equals(t1)) {
                 // 观战模式切换自动走棋，先停止引擎
                 engineStop();
                 // 走黑棋/红棋
@@ -1197,7 +1228,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
                     if (prop.isLinkShowInfo()) {
                         infoShowLabel.setText(td.getTitle() + " | " + td.getBody());
                         infoShowLabel.setTextFill(td.getScore() >= 0 ? Color.BLUE : Color.RED);
-                        timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "固定时间" + prop.getAnalysisValue() / 1000d + "s" : "固定深度" + prop.getAnalysisValue() + "层");
+                        // timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "固定时间" + prop.getAnalysisValue() / 1000d + "s" : "固定深度" + prop.getAnalysisValue() + "层");
+                        timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "Thời gian " + prop.getAnalysisValue() / 1000d + "s" : "Độ sâu " + prop.getAnalysisValue() + " lớp");
                     }
 
                     board.setTip(td.getDetail().get(0), td.getDetail().size() > 1 ? td.getDetail().get(1) : null);
@@ -1286,7 +1318,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     @Override
     public boolean isWatchMode() {
-        return "观战模式".equals(linkComboBox.getValue());
+        // return "观战模式".equals(linkComboBox.getValue());
+        return "SpectatorMode".equals(linkComboBox.getValue());
     }
 
     @Override
