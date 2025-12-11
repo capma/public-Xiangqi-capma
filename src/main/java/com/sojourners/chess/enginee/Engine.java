@@ -43,6 +43,10 @@ public class Engine {
 
     private Random random;
 
+    // Flag to track if book has been exhausted (no results found) and we've switched to engine
+    // Once set to true, we skip book checks for subsequent moves to optimize performance
+    private volatile boolean bookExhausted;
+
     public enum AnalysisModel {
         FIXED_TIME,
         FIXED_STEPS,
@@ -246,9 +250,17 @@ public class Engine {
 
     public void analysis(String fenCode, List<String> moves, char[][] board, boolean redGo) {
         Thread.startVirtualThread(() -> {
-            if (Properties.getInstance().getBookSwitch()) {
+            // Reset book exhausted flag at the start of a new game (when move count is low)
+            // This allows book usage again when starting fresh
+            int moveCount = (moves == null) ? 0 : moves.size();
+            if (moveCount <= 2) {
+                bookExhausted = false;
+            }
+            
+            // Skip book check if we've already exhausted the book and switched to engine mode
+            if (Properties.getInstance().getBookSwitch() && !bookExhausted) {
                 long s = System.currentTimeMillis();
-                List<BookData> results = OpenBookManager.getInstance().queryBook(board, redGo, moves.size() / 2 >= Properties.getInstance().getOffManualSteps());
+                List<BookData> results = OpenBookManager.getInstance().queryBook(board, redGo, moveCount / 2 >= Properties.getInstance().getOffManualSteps());
                 // System.out.println("查询库时间" + (System.currentTimeMillis() - s));
                 System.out.println("Thời gian tra cứu book" + (System.currentTimeMillis() - s));
                 this.cb.showBookResults(results);
@@ -260,7 +272,11 @@ public class Engine {
                     this.cb.bestMove(results.get(0).getMove(), null);
                     return;
                 }
-
+                // Book returned no results, mark as exhausted and switch to engine
+                if (results.size() == 0) {
+                    bookExhausted = true;
+                    System.out.println("Book exhausted, switching to engine mode");
+                }
             }
             this.analysis(fenCode, moves);
         });
@@ -330,6 +346,14 @@ public class Engine {
     public void setAnalysisModel(AnalysisModel model, long v) {
         this.analysisModel = model;
         this.analysisValue = v;
+    }
+
+    /**
+     * Reset the book exhausted flag. Call this when starting a new game
+     * to allow book usage again from the beginning.
+     */
+    public void resetBookExhausted() {
+        this.bookExhausted = false;
     }
 
     public void close() {
