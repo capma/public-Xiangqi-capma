@@ -46,6 +46,8 @@ public class Engine {
     // Flag to track if book has been exhausted (no results found) and we've switched to engine
     // Once set to true, we skip book checks for subsequent moves to optimize performance
     private volatile boolean bookExhausted;
+    
+    private volatile boolean pondering;
 
     public enum AnalysisModel {
         FIXED_TIME,
@@ -243,26 +245,37 @@ public class Engine {
                 }
             }
         }
-        if (td.getDetail().size() > 0) {
+        // Forward updates if there's any useful information (depth, score, time, nps, mate, or PV)
+        // This ensures more frequent log updates, especially during background analysis
+        if (td.getDetail().size() > 0 || td.getDepth() != null || td.getScore() != null || 
+            td.getMate() != null || td.getTime() != null || td.getNps() != null) {
             cb.thinkDetail(td);
         }
     }
 
     public void analysis(String fenCode, List<String> moves, char[][] board, boolean redGo) {
+        analysis(fenCode, moves, board, redGo, false);
+    }
+
+    public void analysis(String fenCode, List<String> moves, char[][] board, boolean redGo, boolean ponder) {
         Thread.startVirtualThread(() -> {
-            // Reset book exhausted flag at the start of a new game (when move count is low)
-            // This allows book usage again when starting fresh
-            int moveCount = (moves == null) ? 0 : moves.size();
-            if (moveCount <= 2) {
+            // Reset book flag for new game (when move count is 0 or very low)
+            if (moves == null || moves.size() <= 2) {
                 bookExhausted = false;
             }
             
-            // Skip book check if we've already exhausted the book and switched to engine mode
-            if (Properties.getInstance().getBookSwitch() && !bookExhausted) {
+            if (!ponder && Properties.getInstance().getBookSwitch() && !bookExhausted) {
                 long s = System.currentTimeMillis();
-                List<BookData> results = OpenBookManager.getInstance().queryBook(board, redGo, moveCount / 2 >= Properties.getInstance().getOffManualSteps());
-                // System.out.println("查询库时间" + (System.currentTimeMillis() - s));
-                System.out.println("Thời gian tra cứu book" + (System.currentTimeMillis() - s));
+                List<BookData> results = new ArrayList<>();
+                try {
+                    results = OpenBookManager.getInstance().queryBook(board, redGo, moves.size() / 2 >= Properties.getInstance().getOffManualSteps());
+                    System.out.println("Thời gian tra cứu book" + (System.currentTimeMillis() - s));
+                } catch (Exception e) {
+                    System.err.println("Lỗi khi tra cứu book: " + e.getMessage());
+                    e.printStackTrace();
+                    // Mark that book has been tried and failed, so we don't query it again
+                    bookExhausted = true;
+                }
                 this.cb.showBookResults(results);
                 if (results.size() > 0 && this.analysisModel != AnalysisModel.INFINITE) {
                     if (Properties.getInstance().getBookDelayEnd() > 0 && Properties.getInstance().getBookDelayEnd() >= Properties.getInstance().getBookDelayStart()) {
@@ -271,19 +284,18 @@ public class Engine {
                     }
                     this.cb.bestMove(results.get(0).getMove(), null);
                     return;
-                }
-                // Book returned no results, mark as exhausted and switch to engine
-                if (results.size() == 0) {
+                } else {
+                    // Book query returned no results, mark as tried and failed to avoid querying again
                     bookExhausted = true;
-                    System.out.println("Book exhausted, switching to engine mode");
                 }
             }
-            this.analysis(fenCode, moves);
+            // Once we switch to engine calculation, don't query book again
+            this.analysis(fenCode, moves, ponder);
         });
 
     }
 
-    private void analysis(String fenCode, List<String> moves) {
+    private void analysis(String fenCode, List<String> moves, boolean ponder) {
         stop();
 
         if (threadNumChange) {
@@ -305,17 +317,60 @@ public class Engine {
         }
         cmd(sb.toString());
 
-        if (analysisModel == AnalysisModel.FIXED_STEPS) {
-            cmd("go depth " + analysisValue);
-        } else if (analysisModel == AnalysisModel.FIXED_TIME) {
-            cmd("go movetime " + analysisValue);
+        boolean isPonder = ponder;
+        pondering = ponder;
+        
+        // For ponder (background analysis), use both movetime AND depth together like VinXiangQi
+        // This ensures the engine continues thinking after ponderhit until both constraints are met
+        if (isPonder) {
+            long movetime;
+            long depth;
+            
+            if (analysisModel == AnalysisModel.FIXED_TIME) {
+                // Use the configured time, and also specify a high depth (like VinXiangQi)
+                movetime = analysisValue;
+                depth = 200; // High depth to allow engine to continue analyzing after ponderhit
+            } else if (analysisModel == AnalysisModel.FIXED_STEPS) {
+                // Use the configured depth, and also specify a reasonable time
+                depth = analysisValue;
+                // Calculate time based on depth: roughly 1 second per depth level, minimum 5 seconds
+                movetime = Math.max(5000, depth * 1000);
+            } else {
+                // INFINITE mode: use default time and depth for ponder
+                movetime = 5000; // 5 seconds default
+                depth = 200; // High depth
+            }
+            
+            // Use both movetime and depth together (like VinXiangQi: "go ponder movetime X depth Y")
+            cmd("go ponder movetime " + movetime + " depth " + depth);
         } else {
-            cmd("go infinite");
+            // Normal analysis (not ponder): use single constraint as before
+            if (analysisModel == AnalysisModel.FIXED_STEPS) {
+                cmd("go depth " + analysisValue);
+            } else if (analysisModel == AnalysisModel.FIXED_TIME) {
+                cmd("go movetime " + analysisValue);
+            } else {
+                cmd("go infinite");
+            }
         }
     }
 
     public void stop() {
         cmd("stop");
+    }
+
+    public void ponderHit() {
+        if (pondering) {
+            cmd("ponderhit");
+            pondering = false;
+        }
+    }
+
+    public void ponderMiss() {
+        if (pondering) {
+            cmd("stop");
+            pondering = false;
+        }
     }
 
     private void cmd(String command) {

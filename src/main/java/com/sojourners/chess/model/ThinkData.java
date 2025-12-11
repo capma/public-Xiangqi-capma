@@ -26,6 +26,10 @@ public class ThinkData {
     private String body;
 
     private Boolean isValid;
+    
+    private Boolean isFromBackgroundAnalysis;
+    
+    private Integer displayScore; // Display score after inversion (for UI)
 
     public ThinkData() {
 
@@ -34,27 +38,41 @@ public class ThinkData {
     public void generate(boolean redGo, boolean isReverse, ChessBoard board) {
         // 生成title
         StringBuilder sb = new StringBuilder();
+        // Add background analysis indicator if applicable
+        if (isFromBackgroundAnalysis != null && isFromBackgroundAnalysis) {
+            sb.append("[Suy nghĩ nền] ");
+        }
         // sb.append("深度: ").append(depth).append("  ");
-        sb.append("Độ sâu: ").append(depth).append("  ");
+        sb.append("Độ sâu: ").append(depth != null ? depth : "?").append("  ");
         boolean f = false;
-        if (score == null) {
+        // Calculate display score without mutating original score
+        Integer scoreToDisplay = score;
+        if (scoreToDisplay == null) {
             // sb.append("绝杀: ");
-            sb.append("Chiếu hết: ");
-            score = mate;
+            sb.append("Chiếu bí: ");
+            scoreToDisplay = mate;
             f = true;
         } else {
             // sb.append("分数: ");
             sb.append("Điểm: ");
-            score = score;
         }
-        if (redGo && isReverse || !redGo && !isReverse) {
-            score = -score;
+        // Calculate inverted score for display only (don't mutate original)
+        if (scoreToDisplay != null) {
+            if (redGo && isReverse || !redGo && !isReverse) {
+                displayScore = -scoreToDisplay;
+            } else {
+                displayScore = scoreToDisplay;
+            }
+            // sb.append(displayScore).append(f ? "步  " : "  ");
+            sb.append(displayScore).append(f ? "nước  " : "  ");
         }
-        // sb.append(score).append(f ? "步  " : "  ");
-        sb.append(score).append(f ? " nước  " : "  ");
-        sb.append("NPS: ").append(nps / 1000).append("K  ");
-        // sb.append("时间: ").append(String.format("%.1fs", time / 1000D));
-        sb.append("Thời gian: ").append(String.format("%.1fs", time / 1000D));
+        if (nps != null) {
+            sb.append("NPS: ").append(nps / 1000).append("K  ");
+        }
+        if (time != null) {
+            // sb.append("时间: ").append(String.format("%.1fs", time / 1000D));
+            sb.append("Thời gian: ").append(String.format("%.1fs", time / 1000D));
+        }
         title = sb.toString();
         // 生成body
         body = board.translate(detail);
@@ -132,5 +150,28 @@ public class ThinkData {
 
     public void setDetail(List<String> detail) {
         this.detail = detail;
+    }
+
+    public Boolean getIsFromBackgroundAnalysis() {
+        return isFromBackgroundAnalysis;
+    }
+
+    public void setIsFromBackgroundAnalysis(Boolean isFromBackgroundAnalysis) {
+        this.isFromBackgroundAnalysis = isFromBackgroundAnalysis;
+    }
+    
+    public Integer getDisplayScore() {
+        // Return displayScore if available, otherwise return score or mate
+        if (displayScore != null) {
+            return displayScore;
+        }
+        if (score != null) {
+            return score;
+        }
+        // If score is null but mate is set, return mate (mate in N moves)
+        if (mate != null) {
+            return mate;
+        }
+        return null;
     }
 }

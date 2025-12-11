@@ -69,6 +69,7 @@
                   <CheckMenuItem fx:id="menuOfShowNumber" mnemonicParsing="false" onAction="#showNumberClick" text="Hiện đường đi" />
                   <CheckMenuItem fx:id="menuOfTopWindow" mnemonicParsing="false" onAction="#topWindowClick" text="Cửa sổ luôn trên" />
                   <CheckMenuItem fx:id="menuOfShowStatus" mnemonicParsing="false" onAction="#showStatusBarClick" text="Hiện thanh trạng thái" />
+                  <CheckMenuItem fx:id="menuOfPonder" mnemonicParsing="false" onAction="#ponderClick" text="Suy nghĩ nền" />
                   <Menu mnemonicParsing="false" text="Kiểu bàn cờ">
                      <items>
                         <RadioMenuItem fx:id="menuOfDefaultBoard" mnemonicParsing="false" onAction="#boardStyleSelected" text="Mặc định">

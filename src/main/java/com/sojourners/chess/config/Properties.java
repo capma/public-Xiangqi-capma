@@ -69,6 +69,8 @@ public class Properties implements Serializable {
 
     private Boolean bookSwitch;
 
+    private boolean backgroundAnalysis;
+
     private int engineDelayStart = 0;
     private int engineDelayEnd = 0;
 
@@ -109,6 +111,7 @@ public class Properties implements Serializable {
         this.moveRule = moveRule;
         this.bookSwitch = bookSwitch;
         this.openBookList = openBookList;
+        this.backgroundAnalysis = false;
     }
 
     public static synchronized Properties getInstance() {
@@ -285,6 +288,14 @@ public class Properties implements Serializable {
 
     public void setBookSwitch(Boolean bookSwitch) {
         this.bookSwitch = bookSwitch;
+    }
+
+    public boolean isBackgroundAnalysis() {
+        return backgroundAnalysis;
+    }
+
+    public void setBackgroundAnalysis(boolean backgroundAnalysis) {
+        this.backgroundAnalysis = backgroundAnalysis;
     }
 
     public long getLinkScanTime() {

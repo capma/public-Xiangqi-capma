@@ -115,6 +115,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
     @FXML
     private CheckMenuItem menuOfShowStatus;
     @FXML
+    private CheckMenuItem menuOfPonder;
+    @FXML
     private CheckMenuItem menuOfShowNumber;
 
     @FXML
@@ -184,6 +186,15 @@ public class Controller implements EngineCallBack, LinkerCallBack {
      * 正在思考（用于连线判断）
      */
     private volatile boolean isThinking;
+
+    private volatile boolean backgroundAnalyzing;
+    private volatile boolean engineMoveInProgress;
+    private String pendingPonderMove;
+    private boolean resumeFromPonder;
+    
+    // Track redGo value when analysis starts to avoid race conditions
+    private volatile Boolean analysisRedGo;
+    private volatile Boolean backgroundAnalysisRedGo;
 
     @FXML
     public void newButtonClick(ActionEvent event) {
@@ -273,6 +284,17 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         prop.setLinkShowInfo(item.isSelected());
         statusToolBar.setVisible(item.isSelected());
         board.autoFitSize(borderPane.getWidth(), borderPane.getHeight(), splitPane.getDividerPositions()[0], prop.isLinkShowInfo());
+    }
+
+    @FXML
+    void ponderClick(ActionEvent event) {
+        CheckMenuItem item = (CheckMenuItem) event.getTarget();
+        prop.setBackgroundAnalysis(item.isSelected());
+        
+        // If disabling background analysis, stop any ongoing ponder analysis
+        if (!item.isSelected()) {
+            stopBackgroundAnalysis();
+        }
     }
 
     @FXML
@@ -374,6 +396,65 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         linkMode.setValue(false);
     }
 
+    private void stopBackgroundAnalysis() {
+        if (backgroundAnalyzing && engine != null) {
+            engine.ponderMiss();
+        }
+        backgroundAnalyzing = false;
+        pendingPonderMove = null;
+        resumeFromPonder = false;
+        backgroundAnalysisRedGo = null;
+    }
+
+    private char[][] copyBoard(char[][] source) {
+        char[][] target = new char[source.length][source[0].length];
+        for (int i = 0; i < source.length; i++) {
+            System.arraycopy(source[i], 0, target[i], 0, source[i].length);
+        }
+        return target;
+    }
+
+    private boolean applyMove(char[][] state, String move) {
+        ChessBoard.Step step = board.stepForBoard(move);
+        if (step == null) {
+            return false;
+        }
+        int fromX = step.getFirst().getX();
+        int fromY = step.getFirst().getY();
+        int toX = step.getSecond().getX();
+        int toY = step.getSecond().getY();
+        if (state[fromY][fromX] == ' ') {
+            return false;
+        }
+        state[toY][toX] = state[fromY][fromX];
+        state[fromY][fromX] = ' ';
+        return true;
+    }
+
+    private void maybeStartBackgroundAnalysis(String ponderMove) {
+        if (!prop.isBackgroundAnalysis() || engine == null || StringUtils.isEmpty(ponderMove)) {
+            stopBackgroundAnalysis();
+            return;
+        }
+        if (robotAnalysis.getValue() || !(robotRed.getValue() || robotBlack.getValue())) {
+            stopBackgroundAnalysis();
+            return;
+        }
+        char[][] snapshot = copyBoard(this.board.getBoard());
+        if (!applyMove(snapshot, ponderMove)) {
+            return;
+        }
+        List<String> futureMoves = new ArrayList<>(moveList);
+        futureMoves.add(ponderMove);
+        // Capture redGo value for background analysis to avoid race conditions
+        // Background analysis is from position after opponent's move, so it's !redGo
+        backgroundAnalysisRedGo = !redGo;
+        engine.analysis(fenCode, futureMoves, snapshot, !redGo, true);
+        pendingPonderMove = ponderMove;
+        backgroundAnalyzing = true;
+        resumeFromPonder = false;
+    }
+
     private void engineGo() {
         if (engine == null) {
             // DialogUtils.showWarningDialog("提示", "引擎未加载");
@@ -386,6 +467,9 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         } else {
             this.isThinking = false;
         }
+
+        // Capture redGo value at analysis start to avoid race conditions
+        analysisRedGo = redGo;
 
         engine.setThreadNum(prop.getThreadNum());
         engine.setHashSize(prop.getHashSize());
@@ -413,6 +497,32 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     }
     private void goCallBack(String move) {
+        if (!engineMoveInProgress && backgroundAnalyzing) {
+            if (StringUtils.isNotEmpty(pendingPonderMove) && pendingPonderMove.equals(move)) {
+                // Ponder hit: opponent made the expected move
+                // Tell engine to continue from the position it was analyzing (like VinXiangQi)
+                // This makes it faster but not instant, as engine still needs to complete analysis
+                if (engine != null) {
+                    engine.ponderHit();
+                    // Don't call engine.stop() - let it continue analyzing the pondered position
+                }
+                // Keep backgroundAnalyzing = true - engine is still analyzing
+                // Set resumeFromPonder so we don't start a new analysis when it's engine's turn
+                resumeFromPonder = true;
+                // Keep pendingPonderMove available for move hint display until bestmove is received
+                // pendingPonderMove will be cleared when bestmove is received or background analysis stops
+            } else {
+                // Ponder miss: opponent made a different move
+                if (engine != null) {
+                    engine.ponderMiss();
+                }
+                backgroundAnalyzing = false;
+                pendingPonderMove = null;
+                resumeFromPonder = false;
+            }
+        } else if (engineMoveInProgress) {
+            stopBackgroundAnalysis();
+        }
         // 重新记录棋谱
         if (p == 0) {
             moveList.clear();
@@ -436,7 +546,21 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         redGo = !redGo;
         // 触发引擎走棋
         if (redGo && robotRed.getValue() || !redGo && robotBlack.getValue() || robotAnalysis.getValue()) {
-            engineGo();
+            if (resumeFromPonder) {
+                // Engine is already analyzing from the pondered position (ponder hit occurred)
+                // Just wait for bestmove - don't start a new analysis (like VinXiangQi behavior)
+                // This makes it faster but not instant, as engine still needs to complete its analysis
+                resumeFromPonder = false;
+                // backgroundAnalyzing will be set to false when bestmove is received
+                // Set isThinking to true since engine is analyzing (from background analysis)
+                this.isThinking = true;
+            } else {
+                // Normal case: start fresh analysis
+                engineGo();
+            }
+        } else {
+            // Opponent's move detected - ensure isThinking is false so graph linker can detect moves
+            this.isThinking = false;
         }
 
     }
@@ -444,8 +568,20 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         if (listView.getItems().size() <= 0)
             return 0;
         if (redGo && robotRed.getValue() || !redGo && robotBlack.getValue() || robotAnalysis.getValue()) {
-            int score = listView.getItems().get(0).getScore();
-            if (listView.getItems().get(0).getMate() != null) {
+            ThinkData td = listView.getItems().get(0);
+            Integer score = td.getScore();
+            Integer mate = td.getMate();
+            
+            // Handle mate situation: when score is null, mate contains the mate distance
+            if (score == null && mate != null) {
+                // Mate in N moves: use a large score value based on mate distance
+                // Positive mate = winning for current side, negative = losing
+                score = (mate > 0 ? 30000 : -30000) - (mate > 0 ? mate : -mate);
+            } else if (score == null) {
+                // No score and no mate - shouldn't happen, but return 0 to be safe
+                score = 0;
+            } else if (mate != null) {
+                // Both score and mate are present (shouldn't normally happen, but handle it)
                 score = (score < 0 ? -30000 : 30000) - score;
             }
             return score;
@@ -699,7 +835,9 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
                             Label title = new Label();
                             title.setText(item.getTitle());
-                            title.setTextFill(item.getScore() >= 0 ? Color.BLUE : Color.RED);
+                            // Use getDisplayScore() for UI display (correctly inverted score)
+                            Integer displayScore = item.getDisplayScore();
+                            title.setTextFill(displayScore != null && displayScore >= 0 ? Color.BLUE : Color.RED);
                             box.getChildren().add(title);
 
                             Label body = new Label();
@@ -865,6 +1003,8 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         menuOfShowNumber.setSelected(prop.isShowNumber());
         // 显示状态栏
         menuOfShowStatus.setSelected(prop.isLinkShowInfo());
+        // Background analysis (Ponder)
+        menuOfPonder.setSelected(prop.isBackgroundAnalysis());
         // 棋盘大小
         if (prop.getBoardSize() == ChessBoard.BoardSize.LARGE_BOARD) {
             menuOfLargeBoard.setSelected(true);
@@ -1004,6 +1144,10 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         listView.getItems().clear();
         // 清空思考状态信息
         this.infoShowLabel.setText("");
+        // Reset analysis tracking
+        analysisRedGo = null;
+        backgroundAnalysisRedGo = null;
+        stopBackgroundAnalysis();
 
         System.gc();
     }
@@ -1202,14 +1346,33 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     @Override
     public void bestMove(String first, String second) {
-        if (redGo && robotRed.getValue() || !redGo && robotBlack.getValue()) {
+        // Check if it's engine's turn, or if this is a bestmove from background analysis after ponder hit
+        boolean isEngineTurn = redGo && robotRed.getValue() || !redGo && robotBlack.getValue();
+        boolean isFromBackgroundAnalysis = backgroundAnalyzing;
+        
+        if (isEngineTurn || isFromBackgroundAnalysis) {
             ChessBoard.Step s = board.stepForBoard(first);
 
             Platform.runLater(() -> {
-                board.move(s.getFirst().getX(), s.getFirst().getY(), s.getSecond().getX(), s.getSecond().getY());
-                board.setTip(second, null);
-
-                goCallBack(first);
+                engineMoveInProgress = true;
+                try {
+                    board.move(s.getFirst().getX(), s.getFirst().getY(), s.getSecond().getX(), s.getSecond().getY());
+                    board.setTip(second, null);
+                    goCallBack(first);
+                    // Clear background analyzing flag since engine has finished calculating
+                    if (backgroundAnalyzing) {
+                        backgroundAnalyzing = false;
+                        // Clear pendingPonderMove when background analysis ends
+                        pendingPonderMove = null;
+                        backgroundAnalysisRedGo = null;
+                    }
+                    maybeStartBackgroundAnalysis(second);
+                } finally {
+                    engineMoveInProgress = false;
+                    // Set isThinking to false after engine move is complete
+                    // This allows graph linker to detect opponent moves
+                    this.isThinking = false;
+                }
             });
 
             if (linkMode.getValue()) {
@@ -1220,9 +1383,36 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
     @Override
     public void thinkDetail(ThinkData td) {
-        if (redGo && robotRed.getValue() || !redGo && robotBlack.getValue() || robotAnalysis.getValue()) {
-            td.generate(redGo, isReverse.getValue(), board);
+        if (redGo && robotRed.getValue() || !redGo && robotBlack.getValue() || robotAnalysis.getValue() || backgroundAnalyzing) {
+            // Capture backgroundAnalyzing state at the time of processing to avoid race conditions
+            // This ensures consistent score inversion even when both analyses are running
+            boolean isFromBackgroundAnalysis = backgroundAnalyzing;
+            
+            // Use the redGo value that was captured when analysis started, not the current redGo
+            // This prevents race conditions when opponent responds instantly and redGo flips
+            // before thinkDetail callbacks from the previous analysis are processed
+            Boolean capturedRedGo = isFromBackgroundAnalysis ? backgroundAnalysisRedGo : analysisRedGo;
+            
+            // Fallback to current redGo if captured value is null (shouldn't happen, but safety check)
+            if (capturedRedGo == null) {
+                capturedRedGo = redGo;
+            }
+            
+            // Calculate displayTurn based on the analysis context
+            // For background analysis: engine analyzes from position after opponent's expected move (engine's turn)
+            // For normal analysis: engine analyzes from current position (captured redGo state)
+            // capturedRedGo already contains the correct value based on isFromBackgroundAnalysis
+            boolean displayTurn = capturedRedGo;
+            
+            // Set the background analysis flag BEFORE generate() so it can prepend the prefix
+            if (isFromBackgroundAnalysis) {
+                td.setIsFromBackgroundAnalysis(true);
+            }
+            
+            td.generate(displayTurn, isReverse.getValue(), board);
             if (td.getValid()) {
+                // Capture state for Platform.runLater to avoid race conditions
+                final boolean finalIsFromBackgroundAnalysis = isFromBackgroundAnalysis;
                 Platform.runLater(() -> {
                     listView.getItems().add(0, td);
                     if (listView.getItems().size() > 128) {
@@ -1231,12 +1421,25 @@ public class Controller implements EngineCallBack, LinkerCallBack {
 
                     if (prop.isLinkShowInfo()) {
                         infoShowLabel.setText(td.getTitle() + " | " + td.getBody());
-                        infoShowLabel.setTextFill(td.getScore() >= 0 ? Color.BLUE : Color.RED);
+                        // Use getDisplayScore() which contains the correctly inverted score
+                        Integer displayScore = td.getDisplayScore();
+                        infoShowLabel.setTextFill(displayScore != null && displayScore >= 0 ? Color.BLUE : Color.RED);
                         // timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "固定时间" + prop.getAnalysisValue() / 1000d + "s" : "固定深度" + prop.getAnalysisValue() + "层");
                         timeShowLabel.setText(prop.getAnalysisModel() == Engine.AnalysisModel.FIXED_TIME ? "Thời gian " + prop.getAnalysisValue() / 1000d + "s" : "Độ sâu " + prop.getAnalysisValue() + " lớp");
                     }
 
-                    board.setTip(td.getDetail().get(0), td.getDetail().size() > 1 ? td.getDetail().get(1) : null);
+                    // During background analysis, show both the expected opponent move and the engine's response
+                    // First move: opponent's expected move (pendingPonderMove)
+                    // Second move: engine's response from the future position (td.getDetail().get(0))
+                    if (finalIsFromBackgroundAnalysis && StringUtils.isNotEmpty(pendingPonderMove)) {
+                        String engineResponse = td.getDetail() != null && td.getDetail().size() > 0 ? td.getDetail().get(0) : null;
+                        board.setTip(pendingPonderMove, engineResponse);
+                    } else {
+                        // Check if detail list is not empty before accessing
+                        if (td.getDetail() != null && td.getDetail().size() > 0) {
+                            board.setTip(td.getDetail().get(0), td.getDetail().size() > 1 ? td.getDetail().get(1) : null);
+                        }
+                    }
                 });
             }
         }
