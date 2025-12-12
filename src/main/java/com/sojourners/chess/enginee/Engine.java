@@ -43,10 +43,6 @@ public class Engine {
 
     private Random random;
 
-    // Flag to track if book has been exhausted (no results found) and we've switched to engine
-    // Once set to true, we skip book checks for subsequent moves to optimize performance
-    private volatile boolean bookExhausted;
-    
     private volatile boolean pondering;
 
     public enum AnalysisModel {
@@ -259,23 +255,10 @@ public class Engine {
 
     public void analysis(String fenCode, List<String> moves, char[][] board, boolean redGo, boolean ponder) {
         Thread.startVirtualThread(() -> {
-            // Reset book flag for new game (when move count is 0 or very low)
-            if (moves == null || moves.size() <= 2) {
-                bookExhausted = false;
-            }
-            
-            if (!ponder && Properties.getInstance().getBookSwitch() && !bookExhausted) {
+            if (!ponder && Properties.getInstance().getBookSwitch()) {
                 long s = System.currentTimeMillis();
-                List<BookData> results = new ArrayList<>();
-                try {
-                    results = OpenBookManager.getInstance().queryBook(board, redGo, moves.size() / 2 >= Properties.getInstance().getOffManualSteps());
-                    System.out.println("Thời gian tra cứu book" + (System.currentTimeMillis() - s));
-                } catch (Exception e) {
-                    System.err.println("Lỗi khi tra cứu book: " + e.getMessage());
-                    e.printStackTrace();
-                    // Mark that book has been tried and failed, so we don't query it again
-                    bookExhausted = true;
-                }
+                List<BookData> results = OpenBookManager.getInstance().queryBook(board, redGo, moves.size() / 2 >= Properties.getInstance().getOffManualSteps());
+                System.out.println("Thời gian tra cứu book " + (System.currentTimeMillis() - s));
                 this.cb.showBookResults(results);
                 if (results.size() > 0 && this.analysisModel != AnalysisModel.INFINITE) {
                     if (Properties.getInstance().getBookDelayEnd() > 0 && Properties.getInstance().getBookDelayEnd() >= Properties.getInstance().getBookDelayStart()) {
@@ -284,12 +267,8 @@ public class Engine {
                     }
                     this.cb.bestMove(results.get(0).getMove(), null);
                     return;
-                } else {
-                    // Book query returned no results, mark as tried and failed to avoid querying again
-                    bookExhausted = true;
                 }
             }
-            // Once we switch to engine calculation, don't query book again
             this.analysis(fenCode, moves, ponder);
         });
 
@@ -401,14 +380,6 @@ public class Engine {
     public void setAnalysisModel(AnalysisModel model, long v) {
         this.analysisModel = model;
         this.analysisValue = v;
-    }
-
-    /**
-     * Reset the book exhausted flag. Call this when starting a new game
-     * to allow book usage again from the beginning.
-     */
-    public void resetBookExhausted() {
-        this.bookExhausted = false;
     }
 
     public void close() {

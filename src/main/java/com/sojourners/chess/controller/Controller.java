@@ -1123,10 +1123,6 @@ public class Controller implements EngineCallBack, LinkerCallBack {
         isReverse.setValue(false);
         // 引擎停止计算
         engineStop();
-        // 重置book exhausted标志，允许新游戏使用book
-        if (engine != null) {
-            engine.resetBookExhausted();
-        }
         // 绘制棋盘
         board = new ChessBoard(this.canvas, prop.getBoardSize(), prop.getBoardStyle(), prop.isStepTip(), prop.isStepSound(), prop.isShowNumber(), fenCode);
         // 设置局面
